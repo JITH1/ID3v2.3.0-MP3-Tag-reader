@@ -131,26 +131,24 @@ state read_metadata(ID3View_data *ID3_data)
 
         ID3_data->frame_Size = ((uint32_t)buffer[0] << 24) | ((uint32_t)buffer[1] << 16) | ((uint32_t)buffer[2] << 8) | ((uint32_t)buffer[3]) ;
 
-        if((ID3_data->frame_Size == 0) || (ID3_data->frame_Size >= sizeof(ID3_data->frame_Data)))
+        if(ID3_data->frame_Size == 0 || (strcmp(ID3_data->frame_type,"No match") == 0))
         {
             break ;
         }
 
         fseek(ID3_data->fptr_mp3,2,SEEK_CUR);
-        
-        read = fread(ID3_data->frame_Data,1,ID3_data->frame_Size,ID3_data->fptr_mp3);
 
-        if(read != ID3_data->frame_Size)
+        if(ID3_data->frame_Size < sizeof(ID3_data->frame_Data))
         {
-            printf(RED"\nFailed to read Data...!\n"RESET);
-            return FAILED;
+            read = fread(ID3_data->frame_Data,1,ID3_data->frame_Size,ID3_data->fptr_mp3);
+            ID3_data->frame_Data[read] = '\0' ;
+            ID3_data->byte_processed += ID3_data->frame_Size + 10 ; 
+            printf(GREEN"| %-18s | %-43s |\n"RESET,ID3_data->frame_type,ID3_data->frame_Data+1);
         }
-        
-        ID3_data->frame_Data[read] = '\0' ;
-
-        ID3_data->byte_processed += ID3_data->frame_Size + 10 ; 
-        
-        printf(GREEN"| %-18s | %-43s |\n"RESET,ID3_data->frame_type,ID3_data->frame_Data+1);
+        else
+        {
+            fseek(ID3_data->fptr_mp3,ID3_data->frame_Size,SEEK_CUR);
+        }
 
     }
     
