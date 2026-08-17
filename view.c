@@ -70,7 +70,9 @@ state validate_mp3_file(char *argv[],ID3View_data *ID3_data)
     }
     else
     {
-        printf(RED"\nUnsupported ID3 Version...!\n"RESET);
+        printf(RED"\nUnsupported ID3 Version...!\n");
+        printf("\n%s ID3 version is : %s\n",ID3_data->mp3_fname,buffer);
+        printf("\nThis project only support for ID3v2.3.0\n\n"RESET);
         return FAILED ;
     }
 
