@@ -31,7 +31,7 @@ int main(int argc ,char *argv[])
 
             if(read_metadata(&ID3_data))
             {
-                printf(GREEN"\nMetadata Readed Successfully...!\n\n"RESET);
+                printf(GREEN"\nMetadata Read Successfully...!\n\n"RESET);
             }
         }
     }
