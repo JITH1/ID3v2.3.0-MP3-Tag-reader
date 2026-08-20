@@ -1,10 +1,12 @@
 #include "All_type.h"
 #include "view.h"
+#include "edit.h"
 
 int main(int argc ,char *argv[])
 {
 
     ID3View_data ID3_data ;
+    ID3Edit_data ID3_edit ;
 
     if(argc < 2)
     {
@@ -42,7 +44,23 @@ int main(int argc ,char *argv[])
             printf(RED"\nInvalid Number Of Arguments...!\n"RESET);
             return FAILED ;
         }
-         
+        
+        if(validate_edit_mp3(argv,&ID3_edit))
+        {
+            printf(GREEN"MP3 File Validation Successfull...!\n"RESET);
+
+            if(edit_metadata(&ID3_edit))
+            {
+                printf(GREEN"\nMetadata Edited Successfully...!\n\n"RESET);
+                return DONE ;
+            }
+            else
+            {
+                printf(RED"\nFailed to edit Metadata...!\n"RESET);
+                return FAILED ;
+            }
+             
+        }
 
     }
     else if(strcmp(argv[1],"-h") == 0)
